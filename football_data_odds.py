@@ -3,6 +3,34 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
+
+st.set_page_config(
+    page_title="Football odds data | Check how much you could've earned if you placed bets on football?",
+    page_icon=":soccer",
+    #layout="wide",
+    #initial_sidebar_state="expanded",
+    )
+
+#We'll hide menu burgerand footer, and add our content in the bottom
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            footer {visibility: hidden;}
+            footer:after {
+            	content:'Made with love and Streamlit'; 
+            	visibility: visible;
+            	display: block;
+            	position: relative;
+            	#background-color: red;
+            	padding: 5px;
+            	top: 2px;
+            }
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+
 st.title("How much you could've earned if you placed bets on football?")
 
 add_selectbox_country = st.selectbox(
@@ -91,8 +119,11 @@ data.insert(9, 'BetWinAway', data['BetAmnt'] + data['AwayBetWin'])
 data.insert(9, 'BetMore25', data['BetAmnt'] + data['BetGoals>25'])
 data.insert(9, 'BetLess25', data['BetAmnt'] + data['BetGoals<25'])
 
+#data to work with
 data = data[['Date', 'HomeTeam', 'AwayTeam', 'Result', 'BetAmnt', 'BetWinHome', 'BetDraw', 'BetWinAway', 'HomeBetWin', 'DrawBetWin', 'AwayBetWin',
              'TotalGoals', 'BetGoals>25', 'BetGoals<25', 'BetMore25', 'BetLess25', 'FTHG', 'FTAG', 'FTR', 'AvgH', 'AvgD', 'AvgA', 'Avg>2.5', 'Avg<2.5']]
+#data to show
+data_show = data[['Date', 'HomeTeam', 'AwayTeam', 'Result', 'AvgH', 'AvgD', 'AvgA', 'Avg>2.5', 'Avg<2.5']]
 
 teams = []
 for i in data['HomeTeam']:
@@ -107,12 +138,18 @@ add_selectbox = st.selectbox(
 )
 
 if add_selectbox != '--- all teams ---':
+    #this df will be used for charting later
     filtered_data_home = data[data['HomeTeam'] == add_selectbox]
     filtered_data_away = data[data['AwayTeam'] == add_selectbox]
     filtered_data_final = filtered_data_home.append(filtered_data_away)
-    st.write(filtered_data_final.sort_values(by=['Date']))
+    #this df is for displaying raw data (limited)
+    data_show_selected_team_home = data[data['HomeTeam'] == add_selectbox]
+    data_show_selected_team_away = data[data['AwayTeam'] == add_selectbox]
+    data_show_selected_team = data_show_selected_team_home.append(data_show_selected_team_away)
+    data_show_selected_team = data_show_selected_team[['Date', 'HomeTeam', 'AwayTeam', 'Result', 'AvgH', 'AvgD', 'AvgA', 'Avg>2.5', 'Avg<2.5']]
+    st.write(data_show_selected_team.sort_values(by=['Date']))
 else:
-    st.write(data)
+    st.write(data_show)
 
 
 
@@ -255,9 +292,7 @@ if add_selectbox != '--- all teams ---':
 
     
 
-st.text('FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win)')
-st.text('FTHG and HG = Full Time Home Team Goals')
-st.text('FTAG and AG = Full Time Away Team Goals')
+
 st.text('AvgH = Market average home win odds')
 st.text('AvgD = Market average draw win odds')
 st.text('AvgA = Market average away win odds')
