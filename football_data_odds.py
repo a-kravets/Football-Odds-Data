@@ -147,7 +147,8 @@ if add_selectbox != '--- all teams ---':
     data_show_selected_team_away = data[data['AwayTeam'] == add_selectbox]
     data_show_selected_team = data_show_selected_team_home.append(data_show_selected_team_away)
     data_show_selected_team = data_show_selected_team[['Date', 'HomeTeam', 'AwayTeam', 'Result', 'AvgH', 'AvgD', 'AvgA', 'Avg>2.5', 'Avg<2.5']]
-    st.write(data_show_selected_team.sort_values(by=['Date']))
+    if st.checkbox("Show raw data on games and odds in table format"): 
+        st.write(data_show_selected_team.sort_values(by=['Date']))
 else:
     st.write(data_show)
 
