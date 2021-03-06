@@ -30,8 +30,7 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-
-st.title("How much you could've earned if you placed bets on football?")
+st.title("How much you could've earned if you placed bets on your favourite football team?")
 
 add_selectbox_country = st.selectbox(
     "What football league are interested in?",
@@ -133,7 +132,7 @@ teams.append('--- all teams ---')
 teams.sort()
 
 add_selectbox = st.selectbox(
-    "What team are interested in?",
+    "What team are you interested in?",
     (teams)
 )
 
