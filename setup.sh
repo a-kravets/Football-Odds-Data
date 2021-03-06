@@ -1,8 +1,5 @@
 mkdir -p ~/.streamlit/
-echo "
-[general]
-email = "4kravets@gmail.com"
-" > ~/.streamlit/credentials.toml
+
 echo "[server]
 headless = true
 port = $PORT
