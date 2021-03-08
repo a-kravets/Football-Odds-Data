@@ -224,7 +224,7 @@ if add_selectbox != '--- all teams ---':
 
     #--------------------------------------------------------------------------
 
-    with st.beta_expander("Total Goals Bets with 2.5 goals threshold"):
+    with st.beta_expander("Total goals bets with 2.5 goals threshold"):
         
         #st.header('Total Goals')
     
