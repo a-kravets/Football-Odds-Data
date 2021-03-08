@@ -342,6 +342,7 @@ if add_selectbox != '--- all teams ---':
              '', ('ENG1', 'SPA1', 'ITA1', 'GER1', 'FRA1', 'POR1', 'NED1', 'SCO1', 'RUS1'),
              index=0)
         filtered_data = data[data['League'] == option]
+        filtered_data = filtered_data[['Home', 'Away', 'Home win', 'Draw', 'Away win']]
         st.write(filtered_data)
         
         st.write('Please read [the Disclaimer](https://smarterscout.com/matchguidance/Information_and_Disclaimer_PLEASE_READ.txt)')
