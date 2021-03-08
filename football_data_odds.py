@@ -171,6 +171,8 @@ if add_selectbox != '--- all teams ---':
     selected_team_away = filtered_data_final[filtered_data_final['AwayTeam'] == add_selectbox]
 
 
+    #--------------------------------------------------------------------------
+
     with st.beta_expander("Home wins, draws and away wins bets"):
         
     
@@ -218,6 +220,9 @@ if add_selectbox != '--- all teams ---':
         st.subheader('What if you bet $100 on away team wins in all ' + add_selectbox + ' away games?')
         st.text('You would got ' + str(selected_team_away['BetWinAway'].sum().astype(int)) + ' USD') 
         st.altair_chart(chart_away_selected, use_container_width=True)
+
+
+    #--------------------------------------------------------------------------
 
     with st.beta_expander("Total Goals Bets with 2.5 goals threshold"):
         
@@ -282,6 +287,8 @@ if add_selectbox != '--- all teams ---':
         st.text('You would got ' + str(selected_team_away['BetMore25'].sum().astype(int)) + ' USD') 
         st.altair_chart(chart_away_selected, use_container_width=True)
 
+    #--------------------------------------------------------------------------
+
     with st.beta_expander("See total goals statistics"):
     
         #Goals at home games
@@ -301,4 +308,40 @@ if add_selectbox != '--- all teams ---':
         st.subheader('Total goals in ' + add_selectbox + ' away games')
         st.text('Red line shows the average (' + str(selected_team_away['TotalGoals'].mean()) + ' goals per game)') 
         st.altair_chart(chart_away_selected + rule, use_container_width=True)
+ 
+    #--------------------------------------------------------------------------
+
+    with st.beta_expander("Would you like to get football games predictions from smartscout?"):
     
+        st.title('Football games predictions from smartscout')
+        
+        DATE_COLUMN = 'date/time'
+        DATA_URL = ('https://smarterscout.com/matchguidance/'
+                    'smarterscout_match_guidance_probabilities.csv')
+        
+        #https://smarterscout.com/matchguidance/smarterscout_match_guidance_probabilities.csv
+        
+        #@st.cache
+        def load_data(nrows):
+            data = pd.read_csv(DATA_URL, nrows=nrows)
+            lowercase = lambda x: str(x).lower()
+            #data.rename(lowercase, axis='columns', inplace=True)
+            #data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
+            return data
+        
+        data_load_state = st.text('Loading data...')
+        data = load_data(10000)
+        data_load_state.text("")
+        
+        #hour_to_filter = st.checkbox('ENG1')
+        
+        
+        st.subheader('Choose the league:')
+        
+        option = st.selectbox(
+             '', ('ENG1', 'SPA1', 'ITA1', 'GER1', 'FRA1', 'POR1', 'NED1', 'SCO1', 'RUS1'),
+             index=0)
+        filtered_data = data[data['League'] == option]
+        st.write(filtered_data)
+        
+        st.write('Please read [the Disclaimer](https://smarterscout.com/matchguidance/Information_and_Disclaimer_PLEASE_READ.txt)')
